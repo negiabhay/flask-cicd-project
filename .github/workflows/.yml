@@ -12,20 +12,20 @@ on:
   schedule:
     - cron: '0 9 * * 1'
 
-jobs::
+jobs:
   test:
     runs-on: ubuntu-latest
-  strategy:
-  fail-fast: false
-  matrix:
-    python-version: ['3.9', '3.10', '3.11']
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
     
     steps:
       - name: Step 1 - Download the code 
         uses: actions/checkout@v4
 
       - name: Step 2 - Download Python
-        uses: actions/checkout@v5
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -57,13 +57,13 @@ jobs::
 
       - name: Print Deploy info
         env:
-          APP_VERSION: ${{ secret.APP_VERSION }}
+          APP_VERSION: ${{ secrets.APP_VERSION }}
         run: |
-          echo: "APP_NAME is $APP_NAME"
-          echo: "APP_VERSION is $APP_VERSION"
+          echo "APP_NAME is $APP_NAME"
+          echo "APP_VERSION is $APP_VERSION"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact
+        uses: actions/upload-artifact@v4
         with:
           name: payeasy-package
           path: payeasy.zip
